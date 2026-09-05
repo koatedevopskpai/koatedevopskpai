@@ -1,6 +1,4 @@
-# Koate Kpai — GitHub Profile README
-> Create a repo named **`koatedevopskpai`** on GitHub and put this as its `README.md` — it will
-> display on your profile page. (Content uses the working public account; links verified live.)
+# Koate Kpai — GitHub Profile
 
 # Hi, I'm Koate Kpai — AI Agent Engineer
 
