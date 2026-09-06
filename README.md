@@ -61,4 +61,4 @@ Claude Certified Developer – Foundations (CCDV-F) — *in progress*
 
 ## Connect
 **LinkedIn:** [your LinkedIn URL]
-**Email:** [your email]
+**Email:** koatekpai@outlook.com
