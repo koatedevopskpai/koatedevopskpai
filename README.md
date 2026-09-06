@@ -55,7 +55,7 @@ human-in-the-loop approval gate, guardrails, and RAGAS-based evals with a separa
 
 ## Certifications
 PMP · PRINCE2 · Lean Six Sigma Green Belt · Certified Scrum Master · Azure Fundamentals (AZ-900) ·
-Claude Certified Developer – Foundations (CCDV-F) — *in progress*
+Claude Certified Developer – Foundations (CCDV-F) — *in progress* . Azure Azure AI Apps and Agents Developer (AI-103) - *in progress*
 
 ---
 
