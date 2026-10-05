@@ -1,14 +1,34 @@
-# Koate Kpai — Platform & DevOps Engineer (AWS · Azure · GCP)
+# Koate Kpai — Platform & DevOps Engineer (AWS · Azure · GCP) · kdb+/q & Market Data
 
 I design, build and operate **production cloud platforms**: Terraform infrastructure-as-code,
 Kubernetes (GKE / EKS / AKS + Helm), CI/CD (Cloud Build / GitHub Actions), and cost-aware **FinOps**
 with hard budget enforcement. I build these platforms for AI/ML workloads — RAG, agentic systems,
 evaluation pipelines — and I make sure they are reliable, observable, and stay within budget.
 
+More recently I've been specialising in **kdb+/q** and **low-latency market-data engineering** —
+the data layer investment banks and hedge funds run on — bringing the same platform discipline
+(testing, observability, cost-awareness) to capital-markets data systems.
+
 My engineering philosophy:
 
 > **Deterministic-first, AI-on-top.** The platform and core logic must be correct, reproducible,
 > observable and cost-controlled — AI enriches it, it never undermines it.
+
+---
+
+## Featured — kdb+ Real-Time Tick System (kdb+/q · C++ · market data)
+**C++ feed handler · q tickerplant · RDB · partitioned HDB · IPC · tests · benchmarks**
+
+A bank-style market-data stack. A **C++ feed handler** speaks the **kdb+ IPC wire protocol
+directly** (no KX library, validated byte-for-byte against q's `-8!`) and pushes into a q
+**tickerplant** (sequence numbers, disk log, fan-out) → **RDB** (live) → **date-partitioned
+splayed HDB**, with an end-of-day flush and historical queries.
+
+- **~800k msg/s** C++ serialization · **~417k rows/s** end-to-end ingestion · **~91 µs** IPC round-trip
+- Byte-exact **unit tests**, an **end-to-end integration test**, and **benchmarks**
+- Architecture diagrams and **8 ADRs** documenting the key design decisions
+
+Repo: **github.com/koatedevopskpai/kdb-portfolio**
 
 ---
 
@@ -48,11 +68,12 @@ Repo: **github.com/koatedevopskpai/ai-platform-proof**
 ---
 
 ## Core Skills
+- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) · kdb+ IPC · partitioned time-series · qSQL · C++ feed-handler development
 - **GCP:** GKE · Cloud Run · BigQuery · Cloud Build · Compute Engine · Artifact Registry · Cloud Scheduler
 - **AWS:** EKS · ECR · RDS (pgvector) · VPC · Budgets · IAM
 - **Cross-platform:** Terraform IaC · Kubernetes + Helm · CI/CD (Cloud Build, GitHub Actions)
 - **FinOps:** cost-allocation tagging, hard budgets, auto-stop guardrails, cost forecasting
-- **Languages:** Python · TypeScript · .NET 8 (C#) · SQL
+- **Languages:** C++ · q (kdb+) · Python · TypeScript · .NET 8 (C#) · SQL
 - **AI/ML:** RAG (pgvector) · agentic workflows · evaluation frameworks (RAGAS, LLM-as-judge) · guardrails
 - **Delivery:** Agile/Scrum · stakeholder & risk management · consulting
 
