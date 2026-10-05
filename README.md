@@ -16,17 +16,24 @@ My engineering philosophy:
 
 ---
 
-## Featured — kdb+ Real-Time Tick System (kdb+/q · C++ · market data)
-**C++ feed handler · q tickerplant · RDB · partitioned HDB · IPC · tests · benchmarks**
+## Featured — kdb+ Data Platform (q · C++ · Java · C#)
+**tickerplant · RDB · partitioned HDB · C++ feed handler · Java REST service · C# subscriber**
 
-A bank-style market-data stack. A **C++ feed handler** speaks the **kdb+ IPC wire protocol
-directly** (no KX library, validated byte-for-byte against q's `-8!`) and pushes into a q
-**tickerplant** (sequence numbers, disk log, fan-out) → **RDB** (live) → **date-partitioned
-splayed HDB**, with an end-of-day flush and historical queries.
+A bank-style market-data platform built across the languages a trading stack is actually
+written in:
 
-- **~800k msg/s** C++ serialization · **~417k rows/s** end-to-end ingestion · **~91 µs** IPC round-trip
-- Byte-exact **unit tests**, an **end-to-end integration test**, and **benchmarks**
-- Architecture diagrams and **8 ADRs** documenting the key design decisions
+- **q** — tickerplant (sequence numbers, disk log, fan-out), RDB, date-partitioned splayed
+  HDB, end-of-day flush and historical queries
+- **C++** — a feed handler that speaks the **kdb+ IPC wire protocol directly** (no KX
+  library), validated byte-for-byte against q's `-8!`
+- **Java** — a Spring Boot **REST service** over the HDB using the KX Java client
+  (connection pooling, input validation)
+- **C#** — a .NET 8 **subscriber** to the tickerplant with live per-symbol aggregation and
+  automatic reconnect
+
+Rigour: **~800k msg/s** C++ serialization · **~417k rows/s** end-to-end ingestion ·
+**~91 µs** IPC round-trip · byte-exact + end-to-end **tests** · **benchmarks** · architecture
+diagrams and **ADRs**.
 
 Repo: **github.com/koatedevopskpai/kdb-portfolio**
 
@@ -68,12 +75,12 @@ Repo: **github.com/koatedevopskpai/ai-platform-proof**
 ---
 
 ## Core Skills
-- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) · kdb+ IPC · partitioned time-series · qSQL · C++ feed-handler development
+- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) · kdb+ IPC · partitioned time-series · qSQL · C++/Java/C# clients and services
 - **GCP:** GKE · Cloud Run · BigQuery · Cloud Build · Compute Engine · Artifact Registry · Cloud Scheduler
 - **AWS:** EKS · ECR · RDS (pgvector) · VPC · Budgets · IAM
 - **Cross-platform:** Terraform IaC · Kubernetes + Helm · CI/CD (Cloud Build, GitHub Actions)
 - **FinOps:** cost-allocation tagging, hard budgets, auto-stop guardrails, cost forecasting
-- **Languages:** C++ · q (kdb+) · Python · TypeScript · .NET 8 (C#) · SQL
+- **Languages:** C++ · Java · q (kdb+) · Python · TypeScript · .NET 8 (C#) · SQL
 - **AI/ML:** RAG (pgvector) · agentic workflows · evaluation frameworks (RAGAS, LLM-as-judge) · guardrails
 - **Delivery:** Agile/Scrum · stakeholder & risk management · consulting
 
