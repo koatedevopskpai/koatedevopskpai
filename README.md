@@ -1,97 +1,123 @@
-# Koate Kpai — Platform & DevOps Engineer (AWS · Azure · GCP) · kdb+/q & Market Data
+# Koate Kpai — AI Implementation Engineer & Cloud Platform Builder
 
-I design, build and operate **production cloud platforms**: Terraform infrastructure-as-code,
-Kubernetes (GKE / EKS / AKS + Helm), CI/CD (Cloud Build / GitHub Actions), and cost-aware **FinOps**
-with hard budget enforcement. I build these platforms for AI/ML workloads — RAG, agentic systems,
-evaluation pipelines — and I make sure they are reliable, observable, and stay within budget.
+I build **AI that runs on production infrastructure**. My background is production cloud
+platforms — Terraform infrastructure-as-code, Kubernetes (GKE / EKS / AKS + Helm),
+CI/CD (Cloud Build / GitHub Actions), and cost-aware FinOps with hard budget
+enforcement — and I now apply that discipline to the AI layer: **RAG, retrieval
+evaluation, agents, and ML pipelines** on Azure AI, AWS, and GCP.
 
-More recently I've been specialising in **kdb+/q** and **low-latency market-data engineering** —
-the data layer investment banks and hedge funds run on — bringing the same platform discipline
-(testing, observability, cost-awareness) to capital-markets data systems.
+I'm currently deep in the **Microsoft AI-103 path** (Azure AI Apps and Agents Developer),
+shipping a hands-on retrieval project on **Azure AI Foundry** — the evaluation harness,
+the metrics, and the lessons documented in a public engineering series.
 
 My engineering philosophy:
 
-> **Deterministic-first, AI-on-top.** The platform and core logic must be correct, reproducible,
-> observable and cost-controlled — AI enriches it, it never undermines it.
+> **Deterministic-first, AI-on-top.** The platform and core logic must be correct,
+> reproducible, observable and cost-controlled — AI enriches it, it never undermines it.
 
 ---
 
-## Featured — kdb+ Data Platform (q · C++ · Java · C#)
-**tickerplant · RDB · partitioned HDB · C++ feed handler · Java REST service · C# subscriber**
+## Featured — Enterprise RAG Pipeline (Azure AI Foundry)
+
+**Repo: github.com/koatedevopskpai/enterprise-rag-pipeline**
+**Series: gcp-architect-blog.web.app (foundry-rag-pipeline)**
+
+An end-to-end RAG pipeline experiment, built the way I run everything — measurable and
+cost-aware:
+
+- **Four retrieval modes** — keyword (BM25), semantic (vectors), hybrid, and reranked
+  hybrid — implemented against Azure AI Search-style candidate retrieval
+- **Evaluation harness** in CI: ranking quality (**H@1, H@5, MRR, nDCG**) plus p50/p95
+  latency, with results committed to version control so every change is traceable
+- **Adversarial eval corpora**: *code*, *semantic* (paraphrase/trap), and *crowded*
+  (near-duplicate) query sets — because easy benchmarks flatter systems
+- Findings published end-to-end in blog posts: retrieval-mode gotchas, the four-mode
+  benchmark, and why **reranking wins on semantic queries — and nothing rescues a
+  crowded, ambiguous corpus**
+
+---
+
+## Featured — kdb+ Market Data Platform (q • C++ • Java • C#)
+
+**tickerplant → RDB → partitioned HDB → C++ feed handler → Java REST service → C# subscriber**
 
 A bank-style market-data platform built across the languages a trading stack is actually
-written in:
+written in; **github.com/koatedevopskpai/kdb-portfolio**.
 
 - **q** — tickerplant (sequence numbers, disk log, fan-out), RDB, date-partitioned splayed
   HDB, end-of-day flush and historical queries
 - **C++** — a feed handler that speaks the **kdb+ IPC wire protocol directly** (no KX
   library), validated byte-for-byte against q's `-8!`
 - **Java** — a Spring Boot **REST service** over the HDB using the KX Java client
-  (connection pooling, input validation)
-- **C#** — a .NET 8 **subscriber** to the tickerplant with live per-symbol aggregation and
-  automatic reconnect
+- **C#** — a .NET 8 **subscriber** to the tickerplant with live per-symbol aggregation
 
-Rigour: **~800k msg/s** C++ serialization · **~417k rows/s** end-to-end ingestion ·
-**~91 µs** IPC round-trip · byte-exact + end-to-end **tests** · **benchmarks** · architecture
-diagrams and **ADRs**.
-
-Repo: **github.com/koatedevopskpai/kdb-portfolio**
+Rigour: ~800k msg/s C++ serialization • ~417k rows/s end-to-end ingestion • ~91 µs IPC
+round-trip • byte-exact + end-to-end tests • benchmarks • ADRs.
 
 ---
 
-## Featured — GCP Platform Proof (GCP DevOps / Platform Engineer)
-**GKE · Cloud Run · BigQuery · Cloud Build · Terraform · Helm · FinOps**
+## Featured — Platform proofs
 
-A production-grade, **live** GCP platform demonstrating the full platform-engineering stack:
-- **Compute Engine** VM running a multi-service stack (TypeScript gateway, Python RAG, .NET 8, pgvector) — verified live end-to-end
-- **Cloud Run** job + **Cloud Scheduler**: scheduled MLOps evaluation pipeline
-- **BigQuery**: `eval_reports` analytics table loaded by the pipeline
-- **Cloud Build** CI/CD: build → push to Artifact Registry → **evaluation gate** → unit tests (Python/Node/.NET)
-- **GKE + Helm** (optional, on-demand) for Kubernetes demo workloads
-- **Terraform** IaC with a **FinOps label taxonomy** on every resource
-- **Hard monthly budget** with 80%/100% alerts — the entire always-on stack fits under it
-
-Repo: **github.com/koatedevopskpai/gcp-proof-platform**
+- **GCP Platform Proof** — live GKE/Cloud Run/BigQuery platform (TypeScript gateway, Python
+  RAG, .NET 8, pgvector), Cloud Build CI/CD with evaluation gates, Terraform FinOps label
+  taxonomy, hard monthly budget. **github.com/koatedevopskpai/gcp-proof-platform**
+- **AWS AI Platform Proof** — the cross-language MLOps/GenAI companion (EKS, Terraform/Helm,
+  pgvector, CI eval gates, enforced budget). **github.com/koatedevopskpai/ai-platform-proof**
 
 ---
 
-## Featured — AI Platform Proof (AWS MLOps/GenAI)
-**Python · .NET 8 · TypeScript · pgvector · Terraform/Helm · CI eval gates**
+## Repo highlights
 
-The AWS companion: a production-grade MLOps/GenAI platform — cross-language RAG stack
-(TypeScript gateway, Python RAG service, .NET 8 ingestion, pgvector), CI **evaluation gates**
-that fail builds on quality regression, Terraform/Helm for EKS, and FinOps tagging with an
-enforced monthly budget. Same deterministic-first discipline, same cost-consciousness.
-
-Repo: **github.com/koatedevopskpai/ai-platform-proof**
+- **RAG / retrieval:** `enterprise-rag-pipeline`, `azure-ai-rag-pipeline`, `financial-research-rag`
+- **Agents:** `agentic-ai-platform`, `gem-agentic-ai`, `gem-enterprise-rag-agent-with-ui`,
+  `agentic-platform-aws`, `bedrock-agentic-demo`, `rag-pipeline-backend`
+- **Vector search & evals:** `gem-langchain-rag`, `gem-vector-search`, `llm-evals-demo`
+- **Data / MLOps:** `insightflow`, `gcp-data-pipeline`, `data-pipeline-engine`, `pipeline-dashboard`
+- **Platform / DevOps:** `pulsenotify-platform`, `gcp-microservices-cloud-portfolioP1`, `gcp-data-engineer-course`
+- **Security labs:** `azure-security-lab`, `aws-security-lab`, `gcp-security-lab`
+- **Quant:** `quant-research-ig`
 
 ---
 
-## Other highlights
-- **Cloud IaC (Terraform):** GCP / AWS / Azure landing zones, container platforms (GKE / EKS / AKS), and premium-workload architectures
-- **azure-ai-soc-triage:** AI-assisted SOC automation (Sentinel, Logic Apps, Functions) — **cost-optimized to <$20/month**
-- **Agent / AI:** agentic RAG platform with HITL approval, guardrails, RAGAS evals, and deterministic fallbacks
+## Blog
+
+**gcp-architect-blog.web.app** — multi-cloud (AWS • GCP • Azure) engineering + AI blog.
+Active series: *foundry-rag-pipeline* on running RAG in Azure AI Foundry; plus GCP/AWS/Azure
+landing-zone and platform-engineering deep dives.
 
 ---
 
 ## Core Skills
-- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) · kdb+ IPC · partitioned time-series · qSQL · C++/Java/C# clients and services
-- **GCP:** GKE · Cloud Run · BigQuery · Cloud Build · Compute Engine · Artifact Registry · Cloud Scheduler
-- **AWS:** EKS · ECR · RDS (pgvector) · VPC · Budgets · IAM
-- **Cross-platform:** Terraform IaC · Kubernetes + Helm · CI/CD (Cloud Build, GitHub Actions)
+
+- **AI / ML:** Azure AI Foundry (AI-103) • RAG & hybrid retrieval • reranking •
+  evaluation (H@k, MRR, nDCG) • agents (LangGraph, Azure AI Agents, Bedrock) •
+  embeddings & vector search • guardrails
+- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) • kdb+ IPC •
+  partitioned time-series • qSQL • C++/Java/C# clients and services
+- **GCP:** GKE • Cloud Run • BigQuery • Cloud Build • Compute Engine • Artifact Registry
+- **AWS:** EKS • ECR • RDS (pgvector) • VPC • Budgets • IAM
+- **Azure:** AI Foundry • AI Search • OpenAI • Functions • Sentinel
+- **Cross-platform:** Terraform IaC • Kubernetes + Helm • CI/CD (GitHub Actions, Cloud Build)
 - **FinOps:** cost-allocation tagging, hard budgets, auto-stop guardrails, cost forecasting
-- **Languages:** C++ · Java · q (kdb+) · Python · TypeScript · .NET 8 (C#) · SQL
-- **AI/ML:** RAG (pgvector) · agentic workflows · evaluation frameworks (RAGAS, LLM-as-judge) · guardrails
-- **Delivery:** Agile/Scrum · stakeholder & risk management · consulting
+- **Languages:** Python • TypeScript • .NET 8 (C#) • C++ • Java • q (kdb+) • SQL
 
 ---
 
 ## Certifications
-PMP · PRINCE2 · Lean Six Sigma Green Belt · Certified Scrum Master · Azure Fundamentals (AZ-900) ·
-Claude Certified Developer – Foundations (CCDV-F) — *in progress* · Azure AI Apps and Agents Developer (AI-103) — *in progress*
+
+**Technical — AI & Cloud:**
+- **Azure AI Apps and Agents Developer (AI-103)** — *in progress*
+- **Claude Certified Developer — Foundations (CCDV-F)** — *in progress*
+- **AWS Certified Solutions Architect – Professional** — *in progress*
+- **Google Cloud Professional Cloud Architect**
+- **Azure Fundamentals (AZ-900)**
+
+**Delivery & consulting:** PMP • PRINCE2 • Lean Six Sigma Green Belt • Certified Scrum Master
 
 ---
 
 ## Connect
+
 **LinkedIn:** https://www.linkedin.com/in/koate-kpai-772a22432/
 **Email:** koatekpai@outlook.com
+**Blog:** https://gcp-architect-blog.web.app
