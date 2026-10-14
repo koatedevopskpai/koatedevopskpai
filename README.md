@@ -1,4 +1,4 @@
-# Koate Kpai — AI Implementation Engineer & Cloud Platform Builder
+# Koate Kpai — AI Platform Engineer & Data Architect Consultant
 
 I build **AI that runs on production infrastructure**. My background is production cloud
 platforms — Terraform infrastructure-as-code, Kubernetes (GKE / EKS / AKS + Helm),
