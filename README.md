@@ -1,138 +1,132 @@
-# Koate Kpai — Platform & AI Engineer (AWS · Azure · GCP)
+# Koate Kpai — AI Platform Engineer & Data Architect Consultant
 
-I design, build and operate **cloud platforms**: Terraform infrastructure-as-code,
-Kubernetes (GKE / EKS / AKS + Helm), CI/CD (Cloud Build / GitHub Actions), and
-cost-aware **FinOps**. I build these for AI/ML workloads — RAG, agentic systems,
-evaluation pipelines — and I care that they are reliable, observable and stay
-within budget.
+I build **AI that runs on production infrastructure**. My background is production cloud
+platforms — Terraform infrastructure-as-code, Kubernetes (GKE / EKS / AKS + Helm),
+CI/CD (Cloud Build / GitHub Actions), and cost-aware FinOps with hard budget
+enforcement — and I now apply that discipline to the AI layer: **RAG, retrieval
+evaluation, agents, and ML pipelines** on Azure AI, AWS, and GCP.
+
+I'm currently deep in the **Microsoft AI-103 path** (Azure AI Apps and Agents Developer),
+shipping a hands-on retrieval project on **Azure AI Foundry** — the evaluation harness,
+the metrics, and the lessons documented in a public engineering series.
 
 My engineering philosophy:
 
-> **Deterministic-first, AI-on-top.** The platform and core logic must be correct, reproducible,
-> observable and cost-controlled — AI enriches it, it never undermines it.
-
-**Two kinds of experience, kept separate.** Eight years of commercial enterprise
-data and platform engineering in regulated rail and utilities. Alongside that,
-self-funded **public reference builds** that demonstrate implementation and
-testing. The reference builds are not commercial delivery, and I do not describe
-them as such.
+> **Deterministic-first, AI-on-top.** The platform and core logic must be correct,
+> reproducible, observable and cost-controlled — AI enriches it, it never undermines it.
 
 ---
 
-## Reference builds — evidence first
+## Featured — Enterprise RAG Pipeline (Azure AI Foundry)
 
-Each of these has a documented strongest result and a documented limit. If a
-number appears below, there is a command behind it.
+**Repo: github.com/koatedevopskpai/enterprise-rag-pipeline**
+**Series: gcp-architect-blog.web.app (foundry-rag-pipeline)**
 
-### Retrieval and evaluation — `enterprise-rag-pipeline`
-Azure AI Search hybrid retrieval: parent-child chunking, four interchangeable
-strategies (BM25, vector, hybrid, LLM-rerank), reciprocal rank fusion, and a
-citation-prompted answer path.
+An end-to-end RAG pipeline experiment, built the way I run everything — measurable and
+cost-aware:
 
-- Four strategies compared on the same 20-query set with the results **committed**
-  to the repository (`eval/comparison.json`).
-- A saved 16-question quality report: relevance 4.75, groundedness 5.00,
-  coherence 4.06, fluency 3.06.
-- A live run against Azure AI Search ingested 11 documents into 41 chunks, scored a
-  three-question baseline 5/5, and **blocked a deliberately unsupported answer**
-  without changing thresholds.
-- Limits: the quality report is a saved run, not a fresh one; the semantic ranker
-  is unconfirmed on the tier used. Start at
-  **[EVIDENCE.md](https://github.com/koatedevopskpai/enterprise-rag-pipeline/blob/main/EVIDENCE.md)**.
+- **Four retrieval modes** — keyword (BM25), semantic (vectors), hybrid, and reranked
+  hybrid — implemented against Azure AI Search-style candidate retrieval
+- **Evaluation harness** in CI: ranking quality (**H@1, H@5, MRR, nDCG**) plus p50/p95
+  latency, with results committed to version control so every change is traceable
+- **Adversarial eval corpora**: *code*, *semantic* (paraphrase/trap), and *crowded*
+  (near-duplicate) query sets — because easy benchmarks flatter systems
+- Findings published end-to-end in blog posts: retrieval-mode gotchas, the four-mode
+  benchmark, and why **reranking wins on semantic queries — and nothing rescues a
+  crowded, ambiguous corpus**
 
-### Agentic systems — `gem-agentic-ai`
-A tool-calling agent in two implementations (a manual ReAct loop and a LangGraph
-graph), with bounded execution and durable memory.
+---
 
-- Tool schema validation, allowlists, deadlines, call/token limits, idempotency and
-  an explicit approval state.
-- Durable, user-scoped conversation memory over SQLite that survives a restart.
-- 148 tests, 94% coverage, CI green with **no credentials** in the job.
-- Limits: a timed-out tool is not killed (Python cannot interrupt a thread); memory
-  is one unencrypted SQLite file on one host; tools without a stable action key are
-  at-least-once; the execution guard is **not** a sandbox.
+## Featured — kdb+ Market Data Platform (q • C++ • Java • C#)
 
-### Evaluation design — `llm-evals-demo`
-A harness for scoring **generated** answers, not reference answers.
+**tickerplant → RDB → partitioned HDB → C++ feed handler → Java REST service → C# subscriber**
 
-- Found and removed a measurement bug where the harness scored the reference answer,
-  guaranteeing a pass. A wrong answer now fails against a real judge.
-- A calibrated, fail-closed gate with a per-case floor that cannot be diluted by a
-  mean.
-- A quality, latency and cost comparison across model configurations.
-- Limits: live samples are small and thresholds are provisional.
+A bank-style market-data platform built across the languages a trading stack is actually
+written in; **github.com/koatedevopskpai/kdb-portfolio**.
 
-### Deterministic engineering — `multi-agent-optimizer`
-A unit-tested critical-path engine with an optional LangGraph layer and resilience
-controls (retry, circuit breaker, schema-validated fallback).
+- **q** — tickerplant (sequence numbers, disk log, fan-out), RDB, date-partitioned splayed
+  HDB, end-of-day flush and historical queries
+- **C++** — a feed handler that speaks the **kdb+ IPC wire protocol directly** (no KX
+  library), validated byte-for-byte against q's `-8!`
+- **Java** — a Spring Boot **REST service** over the HDB using the KX Java client
+- **C#** — a .NET 8 **subscriber** to the tickerplant with live per-symbol aggregation
 
-- An evaluation gate expanded from 2 to 11 golden cases covering cycles,
-  disconnected activities, invalid durations and multiple critical paths.
-- 80% coverage floor enforced in CI.
+Rigour: ~800k msg/s C++ serialization • ~417k rows/s end-to-end ingestion • ~91 µs IPC
+round-trip • byte-exact + end-to-end tests • benchmarks • ADRs.
 
-### Graph retrieval — `agentic-rag-hybrid`
-Neo4j-ready graph retrieval with BM25, deterministic signature vectors, reciprocal
-rank fusion and entity-seeded expansion.
+---
 
-- **15/15 live parity probes** against a real Neo4j instance, after fixing a query
-  that duplicated nodes.
-- A supernode benchmark showing that a result `LIMIT` leaves database work
-  unchanged (9210 hits) while a hop bound reduces it to 11 — measured, not asserted.
-- Limits: "dense" means deterministic signature vectors, **not** learned embeddings.
+## Featured — Platform proofs
 
-### Measured trade-offs — `lexisum`
-Contract clause extraction and summarisation.
+- **GCP Platform Proof** — live GKE/Cloud Run/BigQuery platform (TypeScript gateway, Python
+  RAG, .NET 8, pgvector), Cloud Build CI/CD with evaluation gates, Terraform FinOps label
+  taxonomy, hard monthly budget. **github.com/koatedevopskpai/gcp-proof-platform**
+- **AWS AI Platform Proof** — the cross-language MLOps/GenAI companion (EKS, Terraform/Helm,
+  pgvector, CI eval gates, enforced budget). **github.com/koatedevopskpai/ai-platform-proof**
 
-- TF-IDF MAP 0.727 at 0.005 s versus Sentence-BERT 0.735 at 1.501 s — ~0.008 MAP
-  for roughly 300× the latency.
-- A source-text auditor whose exact matching semantics are documented.
-- Limits: published, not independently reproduced; the judge comparison sampled 15
-  outputs per model.
+---
 
-### Platform and cloud
-- **`gcp-proof-platform`** — cross-language reference platform: TypeScript gateway,
-  Python RAG, .NET 8, pgvector, with Terraform, Helm and Cloud Build configuration.
-  *Status: services and configuration are implemented; Cloud Build run receipts have
-  not been independently inspected, so this is not claimed as a verified live
-  platform.*
-- **`ai-platform-proof`** — AWS deployment path. A low-cost EC2/Docker Compose
-  release with a gateway health check is the **supported** path. *Status: EKS is
-  design-only and never deployed; the budget action stops the database instance, not
-  every resource.*
-- **Cloud IaC (Terraform)** — GCP / AWS / Azure landing zones, container platforms
-  (GKE / EKS / AKS) and premium-workload architectures. *Status: infrastructure
-  examples, not operated clusters on three clouds.*
-- **`azure-ai-soc-triage`** — AI-assisted SOC automation (Sentinel, Logic Apps,
-  Functions). *Status: cost target, not a verified monthly figure.*
+## Repo highlights
+
+- **RAG / retrieval:** `enterprise-rag-pipeline`, `azure-ai-rag-pipeline`, `financial-research-rag`
+- **Agents:** `agentic-ai-platform`, `gem-agentic-ai`, `gem-enterprise-rag-agent-with-ui`,
+  `agentic-platform-aws`, `bedrock-agentic-demo`, `rag-pipeline-backend`
+- **Vector search & evals:** `gem-langchain-rag`, `gem-vector-search`, `llm-evals-demo`
+- **Data / MLOps:** `insightflow`, `gcp-data-pipeline`, `data-pipeline-engine`, `pipeline-dashboard`
+- **Platform / DevOps:** `pulsenotify-platform`, `gcp-microservices-cloud-portfolioP1`, `gcp-data-engineer-course`
+- **Security labs:** `azure-security-lab`, `aws-security-lab`, `gcp-security-lab`
+- **Quant:** `quant-research-ig`
+
+---
+
+## Blog
+
+**gcp-architect-blog.web.app** — multi-cloud (AWS • GCP • Azure) engineering + AI blog.
+Active series: *foundry-rag-pipeline* on running RAG in Azure AI Foundry; plus GCP/AWS/Azure
+landing-zone and platform-engineering deep dives.
+
+---
+
+## Core Skills
+
+- **AI / ML:** Azure AI Foundry (AI-103) • RAG & hybrid retrieval • reranking •
+  evaluation (H@k, MRR, nDCG) • agents (LangGraph, Azure AI Agents, Bedrock) •
+  embeddings & vector search • guardrails
+- **kdb+/q & market data:** tick architecture (tickerplant / RDB / HDB) • kdb+ IPC •
+  partitioned time-series • qSQL • C++/Java/C# clients and services
+- **GCP:** GKE • Cloud Run • BigQuery • Cloud Build • Compute Engine • Artifact Registry
+- **AWS:** EKS • ECR • RDS (pgvector) • VPC • Budgets • IAM
+- **Azure:** AI Foundry • AI Search • OpenAI • Functions • Sentinel
+- **Cross-platform:** Terraform IaC • Kubernetes + Helm • CI/CD (GitHub Actions, Cloud Build)
+- **FinOps:** cost-allocation tagging, hard budgets, auto-stop guardrails, cost forecasting
+- **Languages:** Python • TypeScript • .NET 8 (C#) • C++ • Java • q (kdb+) • SQL
+
+---
+
+## Certifications
+
+**Technical — AI & Cloud:**
+- **Azure AI Apps and Agents Developer (AI-103)** — *in progress*
+- **Claude Certified Developer — Foundations (CCDV-F)** — *in progress*
+- **AWS Certified Solutions Architect – Professional** — *in progress*
+- **Google Cloud Professional Cloud Architect**
+- **Azure Fundamentals (AZ-900)**
+
+**Delivery & consulting:** PMP • PRINCE2 • Lean Six Sigma Green Belt • Certified Scrum Master
 
 ---
 
 ## How I work
 
-I develop these with multiple coding agents, and I document the process because the
-interesting part is not that it works — it is the discipline that stops an agent's
-confident "done" from becoming an unsupported claim:
-**[AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)**.
-
----
-
-## Core skills
-- **GCP:** GKE · Cloud Run · BigQuery · Cloud Build · Compute Engine · Artifact Registry · Cloud Scheduler
-- **AWS:** EKS · ECR · RDS (pgvector) · VPC · Budgets · IAM
-- **Cross-platform:** Terraform IaC · Kubernetes + Helm · CI/CD (Cloud Build, GitHub Actions)
-- **FinOps:** cost-allocation tagging, budget alerts, auto-stop guardrails, cost analysis
-- **Languages:** Python · TypeScript · .NET 8 (C#) · SQL
-- **AI/ML:** RAG (Azure AI Search, pgvector) · agentic workflows (LangGraph) · evaluation design (RAGAS, LLM-as-judge, calibrated gates) · bounded tool execution
-- **Delivery:** requirements analysis · stakeholder & risk management · consulting
-
----
-
-## Certifications
-PMP · PRINCE2 · Lean Six Sigma Green Belt · Certified Scrum Master · Azure Fundamentals (AZ-900) ·
-Claude Certified Developer – Foundations (CCDV-F) — *in progress* · Azure AI Apps and Agents Developer (AI-103) — *in progress*
+I develop these repositories with several coding agents, and I document the process
+because the interesting part is not that it works — it is the discipline that stops
+an agent's confident "done" from becoming an unsupported claim. **→**
+[AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)
 
 ---
 
 ## Connect
+
 **LinkedIn:** https://www.linkedin.com/in/koate-kpai-772a22432/
 **Email:** koatekpai@outlook.com
+**Blog:** https://gcp-architect-blog.web.app
