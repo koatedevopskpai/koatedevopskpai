@@ -29,8 +29,8 @@ cost-aware:
   hybrid — implemented against Azure AI Search-style candidate retrieval
 - **Evaluation harness** in CI: ranking quality (**H@1, H@5, MRR, nDCG**) plus p50/p95
   latency, with results committed to version control so every change is traceable
-- **Adversarial eval corpora**: *code*, *semantic* (paraphrase/trap), and *crowded*
-  (near-duplicate) query sets — because easy benchmarks flatter systems
+- **Corpus generators** for *code*, *semantic* (paraphrase/trap) and *crowded*
+  (near-duplicate) query sets; the saved evaluation covers 20 queries per strategy
 - Findings published end-to-end in blog posts: retrieval-mode gotchas, the four-mode
   benchmark, and why **reranking wins on semantic queries — and nothing rescues a
   crowded, ambiguous corpus**
@@ -51,18 +51,24 @@ written in; **github.com/koatedevopskpai/kdb-portfolio**.
 - **Java** — a Spring Boot **REST service** over the HDB using the KX Java client
 - **C#** — a .NET 8 **subscriber** to the tickerplant with live per-symbol aggregation
 
-Rigour: ~800k msg/s C++ serialization • ~417k rows/s end-to-end ingestion • ~91 µs IPC
-round-trip • byte-exact + end-to-end tests • benchmarks • ADRs.
+Rigour: published benchmark figures from the project's own harness (~800k msg/s C++
+serialization, ~417k rows/s end-to-end ingestion, ~91 µs IPC round-trip), plus
+byte-exact and end-to-end tests, benchmarks and ADRs. These are the project's own
+published figures and are not independently reproduced.
 
 ---
 
 ## Featured — Platform proofs
 
-- **GCP Platform Proof** — live GKE/Cloud Run/BigQuery platform (TypeScript gateway, Python
-  RAG, .NET 8, pgvector), Cloud Build CI/CD with evaluation gates, Terraform FinOps label
-  taxonomy, hard monthly budget. **github.com/koatedevopskpai/gcp-proof-platform**
-- **AWS AI Platform Proof** — the cross-language MLOps/GenAI companion (EKS, Terraform/Helm,
-  pgvector, CI eval gates, enforced budget). **github.com/koatedevopskpai/ai-platform-proof**
+- **GCP Platform Proof** — GCP reference platform (TypeScript gateway, Python RAG, .NET 8,
+  pgvector) with Cloud Build CI/CD, evaluation gates and a Terraform FinOps label
+  taxonomy. Services and configuration are implemented; Cloud Build run receipts have
+  not been independently inspected, and budget alerts cover the database instance rather
+  than every resource. **github.com/koatedevopskpai/gcp-proof-platform**
+- **AWS AI Platform Proof** — reference MLOps/GenAI platform (EC2/Docker Compose release,
+  Terraform, pgvector, CI eval gates) with a candidate acceptance gate and a documented
+  rollback and fallback drill. EKS is design-only and is not deployed.
+  **github.com/koatedevopskpai/ai-platform-proof**
 
 ---
 
