@@ -120,14 +120,6 @@ landing-zone and platform-engineering deep dives.
 
 **Delivery & consulting:** PMP • PRINCE2 • Lean Six Sigma Green Belt • Certified Scrum Master
 
----
-
-## How I work
-
-I develop these repositories with several coding agents, and I document the process
-because the interesting part is not that it works — it is the discipline that stops
-an agent's confident "done" from becoming an unsupported claim. **→**
-[AGENT_WORKFLOW.md](AGENT_WORKFLOW.md)
 
 ---
 
