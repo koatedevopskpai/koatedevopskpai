@@ -17,6 +17,45 @@ My engineering philosophy:
 
 ---
 
+## Featured — AI Platform Proof (AWS · releases, gating, token economics)
+
+**Repo: github.com/koatedevopskpai/ai-platform-proof**
+
+My strongest piece, and the one closest to how I want to be judged: a full AI platform —
+TypeScript gateway, Python RAG API, .NET 8 ingestion service, PostgreSQL/pgvector — where the
+claim is not that it is production software, but that **every statement resolves to a dated
+receipt or is explicitly marked unproven**.
+
+- **Release engineering** — EC2 + Docker Compose with immutable image IDs and a checksummed
+  image archive; the release receipt records source revision, configuration hash, expected and
+  running image IDs and aggregated backend health. Rollback and fallback are drilled, not
+  described. Parity against Amazon RDS in `eu-west-2` is verified rather than assumed — engine
+  and extension versions, schema fingerprint, index definitions, result sets, plan shapes and
+  scores.
+- **Gating on properties, not opinions** — a candidate is promoted only if it clears structural
+  predicates: a real provider call, token usage returned, an exact citation set, no forbidden
+  phrase, and no truncated answer. One command runs seven suites in about four minutes.
+- **Evaluation honesty** — RAGAS over the fixture set, including the finding that a judge
+  scored an answer **character-identical to its source 0.333 faithful**. That result is
+  published rather than buried, and it is the reason model-judged quality stays out of the
+  promotion decision. The judge itself was calibrated against 48 blind human labels:
+  **Cohen's kappa 0.51** (95% CI 0.27–0.75) — usable for reporting, not for gating.
+- **Token economics** — every provider call emits one ledger record carrying attribution,
+  measurement and the rate used, so spend is queryable by model, endpoint and named run. A
+  run's spend joins to its acceptance outcome on a run label, making **cost per accepted
+  answer** a measured number rather than an estimate. Unpriced calls are counted separately,
+  and spend that cannot be attributed stays visible instead of being folded into a total where
+  it would quietly flatter the average.
+- **CI as a measured decision** — a pip cache was added, measured and removed: it hit, but the
+  install time did not move. A pre-built image and `uv` were rejected with the reasons recorded,
+  and run-to-run variance is documented so small deltas are not claimed as wins.
+
+**What it does not establish:** production operation, invoice-accurate cost, or bit-identical
+builds. The Helm chart and EKS environment are design-only and are not deployed; the supported
+path is Compose on EC2. Synthetic data throughout.
+
+---
+
 ## Featured — Enterprise RAG Pipeline (Azure AI Foundry)
 
 **Repo: github.com/koatedevopskpai/enterprise-rag-pipeline**
@@ -65,10 +104,9 @@ published figures and are not independently reproduced.
   taxonomy. Services and configuration are implemented; Cloud Build run receipts have
   not been independently inspected, and budget alerts cover the database instance rather
   than every resource. **github.com/koatedevopskpai/gcp-proof-platform**
-- **AWS AI Platform Proof** — reference MLOps/GenAI platform (EC2/Docker Compose release,
-  Terraform, pgvector, CI eval gates) with a candidate acceptance gate and a documented
-  rollback and fallback drill. EKS is design-only and is not deployed.
-  **github.com/koatedevopskpai/ai-platform-proof**
+
+The same architecture, run on two clouds, with the AWS instance documented to the receipt
+level above.
 
 ---
 
